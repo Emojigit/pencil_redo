@@ -4,7 +4,7 @@
 
 local modname = minetest.get_current_modname()
 local path = minetest.get_modpath(modname)
-local default = minetest.get_modpath("default")
+local default_here = minetest.get_modpath("default")
 
 local function check_protection(pos, name, text)
 	if minetest.is_protected(pos, name) then
@@ -48,7 +48,7 @@ minetest.register_craftitem("pencil_redo:pencil", {
 	inventory_image = "pencil.png"
 })
 
-if default then
+if default_here then
 	minetest.register_craft({
 		output = "pencil_redo:pencil 4",
 		recipe = {
