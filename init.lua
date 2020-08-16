@@ -4,6 +4,7 @@
 
 local modname = minetest.get_current_modname()
 local path = minetest.get_modpath(modname)
+local default = minetest.get_modpath("default")
 
 local function check_protection(pos, name, text)
 	if minetest.is_protected(pos, name) then
@@ -23,6 +24,7 @@ dofile(path.."/text_table.lua")
 
 minetest.register_craftitem("pencil_redo:pencil", {
 	description = "Pencil",
+	groups = {flammable = 2},
 	on_use = function(itemstack, user, pointed_thing)
 		local pmeta = itemstack:get_meta()
 		local text = pmeta:get_string("ptext") or "" 
@@ -46,8 +48,54 @@ minetest.register_craftitem("pencil_redo:pencil", {
 	inventory_image = "pencil.png"
 })
 
+if default then
+	minetest.register_craft({
+		output = "pencil_redo:pencil 4",
+		recipe = {
+			{"default:coal_lump", "", ""},
+			{"group:stick", "", ""},
+			{"group:stick", "", ""},
+		},
+	})
+	minetest.register_craft({
+		output = "pencil_redo:pencil 4",
+		recipe = {
+			{"", "default:coal_lump", ""},
+			{"", "group:stick", ""},
+			{"", "group:stick", ""},
+		},
+	})
+	minetest.register_craft({
+		output = "pencil_redo:pencil 4",
+		recipe = {
+			{"", "", "default:coal_lump"},
+			{"", "", "group:stick"},
+			{"", "", "group:stick"},
+		},
+	})
+	minetest.register_craft({
+		output = "pencil_redo:table",
+		recipe = {
+			{"group:wood", "default:cobble", "group:wood"},
+			{"group:wood", "default:diamond", "group:wood"},
+			{"group:wood", "group:wood", "group:wood"},
+		},
+	})
+end
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "pencil_redo:pencil",
+	burntime = 5,
+})
+minetest.register_craft({
+	type = "fuel",
+	recipe = "pencil_redo:table",
+	burntime = 10,
+})
+
 pencil_redo.get_pencil_stack = function(text)
-	local stack = ItemStack("")
+	local stack = ItemStack("pencil:pencil 1")
 	local meta = stack:get_meta()
 	local stext = tostring(text)
 	if stext=="" or type(text) == "nil" then

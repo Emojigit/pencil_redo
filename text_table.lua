@@ -77,11 +77,4 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-minetest.register_craft({
-	output = "pencil_redo:table",
-	recipe = {
-		{"group:wood", "default:cobble", "group:wood"},
-		{"group:wood", "default:diamond", "group:wood"},
-		{"group:wood", "group:wood", "group:wood"},
-	},
-})
+
