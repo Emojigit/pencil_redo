@@ -5,6 +5,8 @@
 local modname = minetest.get_current_modname()
 local path = minetest.get_modpath(modname)
 
+pencil_redo = {}
+
 dofile(path.."/text_table.lua")
 
 minetest.register_craftitem("pencil_redo:pencil", {
@@ -28,3 +30,17 @@ minetest.register_craftitem("pencil_redo:pencil", {
 	end,
 	inventory_image = "pencil.png"
 })
+
+pencil_redo.get_pencil_stack = function(text)
+	local stack = ItemStack("")
+	local meta = stack:get_meta()
+	local stext = tostring(text)
+	if stext=="" or type(text) == "nil" then
+		meta:set_string("ptext", "")
+		meta:set_string("description", "Pencil")
+	else
+		meta:set_string("ptext", text)
+		meta:set_string("description", "Pencil With Text")
+	end
+	return stack
+end
