@@ -5,6 +5,18 @@
 local modname = minetest.get_current_modname()
 local path = minetest.get_modpath(modname)
 
+local function check_protection(pos, name, text)
+	if minetest.is_protected(pos, name) then
+		minetest.log("action", (name ~= "" and name or "A mod")
+			.. " tried to " .. text
+			.. " at protected position "
+			.. minetest.pos_to_string(pos))
+		minetest.record_protection_violation(pos, name)
+		return true
+	end
+	return false
+end
+
 pencil_redo = {}
 
 dofile(path.."/text_table.lua")
@@ -18,6 +30,9 @@ minetest.register_craftitem("pencil_redo:pencil", {
 			return
 		end
 		local pos = minetest.get_pointed_thing_position(pointed_thing, above)
+		if check_protection(pos, user and user:get_player_name() or "", " Used a pencil with text "..text.." .") then
+			return
+		end
 		local meta = minetest.get_meta(pos);
 		meta:set_string("infotext",text);
 		local log_front = ""
